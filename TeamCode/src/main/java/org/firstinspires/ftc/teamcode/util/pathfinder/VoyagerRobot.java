@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.util.pathfinder;
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import xyz.devmello.voyager.Voyager;
+import org.firstinspires.ftc.teamcode.roadrunner.Localizer;
 import xyz.devmello.voyager.execution.follower.FollowerGenerator;
 import xyz.devmello.voyager.execution.follower.generators.GenericFollowerGenerator;
 import xyz.devmello.voyager.math.control.Controller;
@@ -16,7 +16,7 @@ import xyz.devmello.voyager.robot.components.Motor;
 import xyz.devmello.voyager.robot.drive.MecanumDrive;
 
 @Config
-public class PathfinderRobot {
+public class VoyagerRobot {
     public static double coefficient = 0.05;
     private DcMotor dcMotorFrontRight;
     private DcMotor dcMotorFrontLeft;
@@ -35,9 +35,9 @@ public class PathfinderRobot {
     private static final Controller turnController = new GenericTurnController(coefficient);
     private static final FollowerGenerator followerGenerator = new GenericFollowerGenerator(turnController);
 
-    private Voyager voyager;
+    private xyz.devmello.voyager.Voyager voyager;
 
-    public void init(HardwareMap map, org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive localizer) {
+    public void init(HardwareMap map, Localizer localizer) {
 
         dcMotorFrontRight = map.get(DcMotor.class, "fr");
         dcMotorFrontLeft = map.get(DcMotor.class, "fl");
@@ -75,15 +75,15 @@ public class PathfinderRobot {
                 true
         );
 
-        odometry = new PinpointOdometry(localizer.localizer);
+        odometry = new PinpointOdometry(localizer);
 
         robot = new Robot(drive, odometry);
 
-        voyager = new Voyager(robot, followerGenerator);
+        voyager = new xyz.devmello.voyager.Voyager(robot, followerGenerator);
     }
 
 
-    public Voyager voyager() {
+    public xyz.devmello.voyager.Voyager voyager() {
         return this.voyager;
     }
 }
