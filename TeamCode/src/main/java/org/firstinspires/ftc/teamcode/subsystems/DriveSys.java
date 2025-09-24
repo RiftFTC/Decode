@@ -9,21 +9,20 @@ import com.arcrobotics.ftclib.command.RunCommand;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.teamcode.Robot;
-import org.firstinspires.ftc.teamcode.roadrunner.PinpointDrive;
+import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;
 
 import java.util.function.DoubleSupplier;
 
 @Config
 public class DriveSys extends SubsystemBase {
-    public final PinpointDrive drive;
+    public final MecanumDrive drive;
 
     public static boolean AUTOMATION = false;
     public static double slow = 1;
     public static double slowT = 0.7;
 
     public DriveSys(HardwareMap hardwareMap) {
-        drive = new PinpointDrive(hardwareMap, Robot.startPose);
-        drive.setCoast();
+        drive = new MecanumDrive(hardwareMap, Robot.startPose);
     }
 
     public Command drive(DoubleSupplier f, DoubleSupplier s, DoubleSupplier t) {

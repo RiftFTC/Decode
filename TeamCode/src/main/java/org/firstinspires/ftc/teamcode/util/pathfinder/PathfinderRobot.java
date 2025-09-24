@@ -37,7 +37,7 @@ public class PathfinderRobot {
 
     private Voyager voyager;
 
-    public void init(HardwareMap map) {
+    public void init(HardwareMap map, org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive localizer) {
 
         dcMotorFrontRight = map.get(DcMotor.class, "fr");
         dcMotorFrontLeft = map.get(DcMotor.class, "fl");
@@ -75,7 +75,7 @@ public class PathfinderRobot {
                 true
         );
 
-        odometry = new PinpointOdometry(map);
+        odometry = new PinpointOdometry(localizer.localizer);
 
         robot = new Robot(drive, odometry);
 
