@@ -4,7 +4,6 @@ import android.util.Log;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.PoseVelocity2d;
 import com.acmerobotics.roadrunner.ftc.FlightRecorder;
-import com.acmerobotics.roadrunner.ftc.GoBildaPinpointDriverRR;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.teamcode.roadrunner.messages.PoseMessage;
 
@@ -14,9 +13,9 @@ public class PinpointDrive extends MecanumDrive{
         //Y OFF = 1.8845 in. BACKWARD
         public double xOffset = 60.325;
         public double yOffset = -47.8663;
-        public GoBildaPinpointDriverRR.GoBildaOdometryPods resolution = GoBildaPinpointDriverRR.GoBildaOdometryPods.goBILDA_4_BAR_POD;
-        public GoBildaPinpointDriverRR.EncoderDirection xDirection = GoBildaPinpointDriverRR.EncoderDirection.FORWARD;
-        public GoBildaPinpointDriverRR.EncoderDirection yDirection = GoBildaPinpointDriverRR.EncoderDirection.REVERSED;
+        public GoBildaPinpointDriver.GoBildaOdometryPods resolution = GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD;
+        public GoBildaPinpointDriver.EncoderDirection xDirection = GoBildaPinpointDriver.EncoderDirection.FORWARD;
+        public GoBildaPinpointDriver.EncoderDirection yDirection = GoBildaPinpointDriver.EncoderDirection.REVERSED;
     }
     public static Params PARAMS = new Params();
     public GoBildaPinpointDriverRR odometry;
