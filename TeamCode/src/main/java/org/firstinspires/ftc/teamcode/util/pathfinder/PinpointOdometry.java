@@ -7,8 +7,8 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
-import xyz.devmello.voyager.geometry.Angle;
-import xyz.devmello.voyager.geometry.PointXYZ;
+import xyz.devmello.voyager.math.geometry.Angle;
+import xyz.devmello.voyager.math.geometry.PointXYZ;
 import xyz.devmello.voyager.robot.AbstractOdometry;
 
 import static org.firstinspires.ftc.teamcode.roadrunner.PinpointDrive.PARAMS;

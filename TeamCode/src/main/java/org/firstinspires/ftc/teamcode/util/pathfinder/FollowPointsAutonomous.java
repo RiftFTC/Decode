@@ -6,9 +6,9 @@ import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import xyz.devmello.voyager.Voyager;
-import xyz.devmello.voyager.geometry.*;
+import xyz.devmello.voyager.math.geometry.*;
 import xyz.devmello.voyager.pathgen.LocalizedPathGen;
-import xyz.devmello.voyager.zones.Zone;
+import xyz.devmello.voyager.pathgen.zones.Zone;
 
 import java.util.ArrayList;
 import java.util.List;

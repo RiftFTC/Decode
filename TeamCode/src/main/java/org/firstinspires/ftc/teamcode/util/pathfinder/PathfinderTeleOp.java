@@ -3,9 +3,9 @@ package org.firstinspires.ftc.teamcode.util.pathfinder;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import xyz.devmello.voyager.Voyager;
-import xyz.devmello.voyager.geometry.Angle;
-import xyz.devmello.voyager.geometry.PointXYZ;
-import xyz.devmello.voyager.geometry.Translation;
+import xyz.devmello.voyager.math.geometry.Angle;
+import xyz.devmello.voyager.math.geometry.PointXYZ;
+import xyz.devmello.voyager.math.geometry.Translation;
 
 @TeleOp(name = "PathfinderTeleOp", group = "default")
 public class PathfinderTeleOp extends LinearOpMode {

@@ -1,0 +1,118 @@
+package org.firstinspires.ftc.teamcode.roadrunner;
+
+import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.roadrunner.*;
+import com.acmerobotics.roadrunner.ftc.*;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.IMU;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AngularVelocity;
+import org.firstinspires.ftc.robotcore.external.navigation.UnnormalizedAngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
+import org.firstinspires.ftc.teamcode.roadrunner.messages.TwoDeadWheelInputsMessage;
+
+import java.lang.Math;
+
+@Config
+public final class TwoDeadWheelLocalizer implements Localizer {
+    public static class Params {
+        public double parYTicks = 0.0; // y position of the parallel encoder (in tick units)
+        public double perpXTicks = 0.0; // x position of the perpendicular encoder (in tick units)
+    }
+
+    public static Params PARAMS = new Params();
+
+    public final Encoder par, perp;
+    public final IMU imu;
+
+    private int lastParPos, lastPerpPos;
+    private Rotation2d lastHeading;
+
+    private final double inPerTick;
+
+    private double lastRawHeadingVel, headingVelOffset;
+    private boolean initialized;
+
+    public TwoDeadWheelLocalizer(HardwareMap hardwareMap, IMU imu, double inPerTick) {
+
+        par = new OverflowEncoder(new RawEncoder(hardwareMap.get(DcMotorEx.class, "par")));
+        perp = new OverflowEncoder(new RawEncoder(hardwareMap.get(DcMotorEx.class, "perp")));
+
+
+
+        this.imu = imu;
+
+        this.inPerTick = inPerTick;
+
+        FlightRecorder.write("TWO_DEAD_WHEEL_PARAMS", PARAMS);
+    }
+
+    public Twist2dDual<Time> update() {
+        PositionVelocityPair parPosVel = par.getPositionAndVelocity();
+        PositionVelocityPair perpPosVel = perp.getPositionAndVelocity();
+
+        YawPitchRollAngles angles = imu.getRobotYawPitchRollAngles();
+        // Use degrees here to work around https://github.com/FIRST-Tech-Challenge/FtcRobotController/issues/1070
+        AngularVelocity angularVelocityDegrees = imu.getRobotAngularVelocity(AngleUnit.DEGREES);
+        AngularVelocity angularVelocity = new AngularVelocity(
+                UnnormalizedAngleUnit.RADIANS,
+                (float) Math.toRadians(angularVelocityDegrees.xRotationRate),
+                (float) Math.toRadians(angularVelocityDegrees.yRotationRate),
+                (float) Math.toRadians(angularVelocityDegrees.zRotationRate),
+                angularVelocityDegrees.acquisitionTime
+        );
+
+        FlightRecorder.write("TWO_DEAD_WHEEL_INPUTS", new TwoDeadWheelInputsMessage(parPosVel, perpPosVel, angles, angularVelocity));
+
+        Rotation2d heading = Rotation2d.exp(angles.getYaw(AngleUnit.RADIANS));
+
+        // see https://github.com/FIRST-Tech-Challenge/FtcRobotController/issues/617
+        double rawHeadingVel = angularVelocity.zRotationRate;
+        if (Math.abs(rawHeadingVel - lastRawHeadingVel) > Math.PI) {
+            headingVelOffset -= Math.signum(rawHeadingVel) * 2 * Math.PI;
+        }
+        lastRawHeadingVel = rawHeadingVel;
+        double headingVel = headingVelOffset + rawHeadingVel;
+
+        if (!initialized) {
+            initialized = true;
+
+            lastParPos = (int) parPosVel.position;
+            lastPerpPos = (int) perpPosVel.position;
+            lastHeading = heading;
+
+            return new Twist2dDual<>(
+                    Vector2dDual.constant(new Vector2d(0.0, 0.0), 2),
+                    DualNum.constant(0.0, 2)
+            );
+        }
+
+        int parPosDelta = (int) (parPosVel.position - lastParPos);
+        int perpPosDelta = (int) (perpPosVel.position - lastPerpPos);
+        double headingDelta = heading.minus(lastHeading);
+
+        Twist2dDual<Time> twist = new Twist2dDual<>(
+                new Vector2dDual<>(
+                        new DualNum<Time>(new double[] {
+                                parPosDelta - PARAMS.parYTicks * headingDelta,
+                                parPosVel.velocity - PARAMS.parYTicks * headingVel,
+                        }).times(inPerTick),
+                        new DualNum<Time>(new double[] {
+                                perpPosDelta - PARAMS.perpXTicks * headingDelta,
+                                perpPosVel.velocity - PARAMS.perpXTicks * headingVel,
+                        }).times(inPerTick)
+                ),
+                new DualNum<>(new double[] {
+                        headingDelta,
+                        headingVel,
+                })
+        );
+
+        lastParPos = (int) parPosVel.position;
+        lastPerpPos = (int) perpPosVel.position;
+        lastHeading = heading;
+
+        return twist;
+    }
+}

@@ -10,6 +10,7 @@
 
 package xyz.devmello.voyager.pathgen;
 
+import xyz.devmello.voyager.math.geometry.Geometry;
 import xyz.devmello.voyager.math.geometry.PointXY;
 import xyz.devmello.voyager.pathgen.zones.Zone;
 
@@ -260,6 +261,10 @@ public class LocalizedPathGen {
         );
     }
 
+
+    public List<PointXY> getPath(PointXY start, PointXY end) {
+        return getPath(start, end, 1);
+    }
     /**
      * Get a path from point A to point B.
      *
