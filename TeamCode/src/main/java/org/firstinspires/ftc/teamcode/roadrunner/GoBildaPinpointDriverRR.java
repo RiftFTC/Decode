@@ -38,6 +38,8 @@ public class GoBildaPinpointDriverRR extends GoBildaPinpointDriver {
 
     }
 
+
+
     public void setEncoderResolution(double ticks_per_mm) {
         super.setEncoderResolution(ticks_per_mm);
         this.currentTicksPerMM = (float)ticks_per_mm;
@@ -49,9 +51,13 @@ public class GoBildaPinpointDriverRR extends GoBildaPinpointDriver {
     }
 
     public Pose2d getPositionRR() {
-        Pose2D ftcPose = this.getPosition();
-        return new Pose2d(ftcPose.getX(DistanceUnit.INCH), ftcPose.getY(DistanceUnit.INCH), ftcPose.getHeading(AngleUnit.RADIANS));
+        Pose2D ftcPose = getPosition();
+        return new Pose2d(
+                ftcPose.getX(DistanceUnit.INCH),
+                ftcPose.getY(DistanceUnit.INCH),
+                ftcPose.getHeading(AngleUnit.RADIANS));
     }
+
 
     public PoseVelocity2d getVelocityRR() {
         Pose2D ftcVelocity = this.getVelocity();
