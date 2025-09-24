@@ -28,6 +28,11 @@ public class Precision {
         }
     }
 
+    public static double linearInterpolate(double x, double x0, double x1, double y0, double y1) {
+        x = clip(x, Math.min(x0, x1), Math.max(x0, x1));
+        return y0 + (y1 - y0) * (x - x0) / (x1 - x0);
+    }
+
     public static double calculateWeightedValue(double limitLeft, double limitRight, double weight) {
         if (weight < 0 || weight > 1) return -1;
         return limitLeft + (limitRight - limitLeft) * (1 - weight);

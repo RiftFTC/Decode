@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.subsystems;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.hardware.SimpleServo;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
+import org.firstinspires.ftc.teamcode.util.math.Precision;
 import xyz.devmello.voyager.Voyager;
 import xyz.devmello.voyager.math.geometry.PointXY;
 import xyz.devmello.voyager.math.geometry.PointXYZ;
@@ -11,7 +12,7 @@ public class TurretSys extends SubsystemBase {
 
     private final SimpleServo turret, pitch;
     private final MotorEx motor;
-    private final Voyager drive;
+    private final Voyager voyager;
 
     public final PointXY GOAL_POSE = new PointXY(-72, 72); //inches
 
@@ -27,9 +28,9 @@ public class TurretSys extends SubsystemBase {
 
     private boolean isActive = false;
 
-    public TurretSys(SimpleServo turret, SimpleServo pitch, MotorEx motor, Voyager drive) {
+    public TurretSys(SimpleServo turret, SimpleServo pitch, MotorEx motor, Voyager voyager) {
         this.turret = turret;
-        this.drive = drive;
+        this.voyager = voyager;
         this.pitch = pitch;
         this.motor = motor;
         turret.setPosition(TURRET_MID);
@@ -55,25 +56,24 @@ public class TurretSys extends SubsystemBase {
      * position the turret at the specified angle.
      */
     public double getTargetPosition(double targetAngle) {
-        return TURRET_RIGHT + (TURRET_LEFT - TURRET_RIGHT) * (targetAngle - 90) / 180;
+        return Precision.linearInterpolate(targetAngle, 90, 270, TURRET_RIGHT, TURRET_LEFT);
     }
 
     public double getTargetPower(double distance) {
-        return POWER_MIN + (POWER_MAX - POWER_MIN) * (distance - 20) / 180;
+        return Precision.linearInterpolate(distance, 20, 200, POWER_MIN, POWER_MAX);
     }
 
     public double getPitchPosition(double distance) {
-        return PITCH_MIN + (PITCH_MAX - PITCH_MIN) * (distance - 20) / 180;
+        return Precision.linearInterpolate(distance, 20, 200, PITCH_MIN, PITCH_MAX);
     }
 
     @Override
     public void periodic() {
-        PointXYZ position = drive.getPosition();
+        PointXYZ position = voyager.getPosition();
         double distance = position.distance(GOAL_POSE);
         //position.angleTo(GOAL_POSE).subtract(position.z()).deg() is the angle from robot to goal relative to robot forward in degrees
-        //Math.max(90, Math.min(270, ...)) limits the angle to be between 90 and 270 degrees
         //getTargetPosition(...) converts the angle to servo position
-        turret.setPosition(getTargetPosition(Math.max(90, Math.min(270, position.angleTo(GOAL_POSE).subtract(position.z()).deg()))));
+        turret.setPosition(getTargetPosition(position.angleTo(GOAL_POSE).subtract(position.z()).deg()));
         pitch.setPosition(getPitchPosition(distance));
         if (isActive) {
             motor.set(getTargetPower(distance));

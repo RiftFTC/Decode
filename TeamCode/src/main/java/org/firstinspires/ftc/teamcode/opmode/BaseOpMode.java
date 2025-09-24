@@ -11,15 +11,11 @@ import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSys;
 import org.firstinspires.ftc.teamcode.subsystems.TurretSys;
-import org.firstinspires.ftc.teamcode.util.pathfinder.VoyagerRobot;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
-import xyz.devmello.voyager.Voyager;
 import xyz.devmello.voyager.math.geometry.Angle;
 
 public class BaseOpMode extends CommandOpMode {
-    protected VoyagerRobot voyagerRobot;
-    protected Voyager voyager;
     protected GamepadEx gamepadEx1, gamepadEx2;
     protected MotorEx fl, fr, bl, br, shooter;
     protected DriveSys driveSys;
@@ -59,17 +55,15 @@ public class BaseOpMode extends CommandOpMode {
 
     public void initSys() {
         driveSys = new DriveSys(hardwareMap);
-        voyagerRobot.init(hardwareMap, driveSys.drive.localizer);
-        voyager = voyagerRobot.voyager();
 
         //turretSys = new TurretSys(hardwareMap);
     }
 
     @SuppressLint("SdCardPath")
     public void setupMisc() {
-        voyager.setSpeed(1);
-        voyager.setAngleTolerance(Angle.fromDeg(3));
-        voyager.setTolerance(3);
+        driveSys.voyager.setSpeed(1);
+        driveSys.voyager.setAngleTolerance(Angle.fromDeg(3));
+        driveSys.voyager.setTolerance(3);
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
         WebcamName webcamName = hardwareMap.get(WebcamName.class, "Webcam 1");
         camera = OpenCvCameraFactory.getInstance().createWebcam(webcamName);
@@ -91,7 +85,6 @@ public class BaseOpMode extends CommandOpMode {
     @Override
     public void run() {
         super.run();
-        if (!DriveSys.AUTOMATION) driveSys.drive.updatePoseEstimate();
 //        activityManager.getMemoryInfo(memoryInfo);
 //        tad("Available Memory", (float) memoryInfo.availMem / (float) memoryInfo.totalMem * 100.0F);
         double loop = System.nanoTime();

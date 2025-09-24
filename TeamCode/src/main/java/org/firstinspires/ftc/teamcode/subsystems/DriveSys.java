@@ -10,6 +10,8 @@ import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.teamcode.Robot;
 import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;
+import org.firstinspires.ftc.teamcode.util.pathfinder.VoyagerRobot;
+import xyz.devmello.voyager.Voyager;
 
 import java.util.function.DoubleSupplier;
 
@@ -20,9 +22,13 @@ public class DriveSys extends SubsystemBase {
     public static boolean AUTOMATION = false;
     public static double slow = 1;
     public static double slowT = 0.7;
+    private VoyagerRobot voyagerRobot;
+    public Voyager voyager;
 
     public DriveSys(HardwareMap hardwareMap) {
         drive = new MecanumDrive(hardwareMap, Robot.startPose);
+        voyagerRobot.init(hardwareMap, drive.localizer);
+        voyager = voyagerRobot.voyager();
     }
 
     public Command drive(DoubleSupplier f, DoubleSupplier s, DoubleSupplier t) {
@@ -46,5 +52,11 @@ public class DriveSys extends SubsystemBase {
         return new InstantCommand(() -> {
             DriveSys.slow = slow;
         });
+    }
+
+    @Override
+    public void periodic() {
+        drive.updatePoseEstimate();
+        voyager.getOdometry().tick();
     }
 }
