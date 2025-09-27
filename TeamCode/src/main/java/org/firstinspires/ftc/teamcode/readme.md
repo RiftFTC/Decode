@@ -1,3 +1,133 @@
+# Sorter Sys 
+
+---
+
+## Overview
+
+- **Robot capacity**: 3 artifacts
+- **Artifact colors**: *Green* or *Purple*
+- **Sensors**: 3 color sensors to detect each artifact’s color
+- **Storage**: `artifactArray[3]` holds the current inventory
+- **Scoring**:
+    - Each scored artifact = 1 point
+    - If a complete motif is scored, points are doubled (×2)
+
+---
+
+## Motifs
+
+The robot can earn double points for any one of the following color sequences.  
+The chosen motif is fixed **before** the match starts.
+
+| Motif # | Sequence |
+|---------|----------|
+| 1 | GREEN → PURPLE → PURPLE |
+| 2 | PURPLE → GREEN → PURPLE |
+| 3 | PURPLE → PURPLE → GREEN |
+
+---
+
+## Class Responsibilities
+
+| Responsibility | Key Methods / Logic |
+|-----------------|---------------------|
+| **Inventory Management** | Store, update, and clear the `artifactArray[3]`. |
+| **Sorting & Release** | `releaseNext()` – releases artifacts in motif‑compliant order. |
+| **Scoring** | Keep track of points; apply double‑point bonus when a motif is completed. |
+| **History Tracking** | Record all released artifacts to determine the next artifact for the motif and whether a double point condition has been met. |
+
+---
+
+## `releaseNext()` Logic
+
+1. **Determine Next Artifact in Motif**
+    - Look at history: how many artifacts have already been released that match the motif so far.
+    - Identify the next expected color (e.g., if motif is *GREEN, PURPLE, PURPLE* and two PURPLEs have already been released, the next should be GREEN).
+
+2. **Search Inventory**
+    - If an artifact of the required color exists in `artifactArray`, release that one.
+    - Otherwise, release the first available artifact (any color).
+
+3. **Update State**
+    - Remove the released artifact from `artifactArray`.
+    - Append it to a *release history* list.
+    - Update score: +1 point; if the motif is now complete, apply double‑point bonus.
+
+4. **Edge Cases**
+    - If inventory is empty → do nothing.
+    - If no artifact matches the expected color → fallback to the first available artifact.
+
+---
+
+## Example Flow
+
+Given:
+- Motif = `GREEN, PURPLE, PURPLE`
+- Inventory (in order): `[PURPLE, PURPLE, GREEN]`
+
+| Call | Expected Release | Remaining Inventory |
+|------|------------------|---------------------|
+| 1    | GREEN            | `[PURPLE, PURPLE]`  |
+| 2    | PURPLE (first)   | `[PURPLE]`          |
+| 3    | PURPLE (second)  | `[]`                |
+
+After the third call, the motif is completed and the robot receives **double points** for that set.
+
+---
+
+## Suggested Data Structures
+
+```java
+enum Color { GREEN, PURPLE }
+
+class SorterSys {
+    private Color[] inventory = new Color[3];
+    private List<Color> releaseHistory = new ArrayList<>();
+    private int score = 0;
+    private Color[] motif;          // e.g., {GREEN, PURPLE, PURPLE}
+    
+    // constructor, setters/getters ...
+    
+    public void releaseNext() {
+        if (Arrays.stream(inventory).allMatch(c -> c == ARTIFACT_COLOR.EMPTY)) return -1;
+
+        ARTIFACT_COLOR expected = motifPattern[releaseHistory.size() % 3];
+
+        // Try to find a matching color in the inventory
+        for (int i = 0; i < 3; i++) {
+            if (inventory[i] == expected) {
+                releaseHistory.add(expected);
+                return i;
+            }
+        }
+
+        // Now release the next available artifact
+        for (int i = 0; i < 3; i++) {
+            if (inventory[i] != ARTIFACT_COLOR.EMPTY) {
+                releaseHistory.add(inventory[i]);
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    // helper methods: inventoryEmpty(), determineNextColorForMotif(),
+    // findFirstMatching(), removeFromInventory(), isMotifCompleted() ...
+}
+```
+
+---
+
+## Summary
+
+- **Capacity**: 3 artifacts
+- **Colors**: Green / Purple
+- **Scoring**: 1 point per artifact; double points for a complete motif
+- **Core method**: `releaseNext()` orchestrates artifact release, inventory updates, and scoring based on the chosen motif.
+
+Implement the helper functions and state tracking to satisfy these rules.
+
+
 ## TeamCode Module
 
 Welcome!

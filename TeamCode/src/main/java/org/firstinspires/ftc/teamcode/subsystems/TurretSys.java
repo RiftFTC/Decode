@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.hardware.SimpleServo;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
@@ -8,6 +9,7 @@ import xyz.devmello.voyager.Voyager;
 import xyz.devmello.voyager.math.geometry.PointXY;
 import xyz.devmello.voyager.math.geometry.PointXYZ;
 
+@Config
 public class TurretSys extends SubsystemBase {
 
     private final SimpleServo turret, pitch;
@@ -80,5 +82,9 @@ public class TurretSys extends SubsystemBase {
         } else {
             motor.set(0);
         }
+    }
+
+    public boolean isActive() {
+        return isActive;
     }
 }
