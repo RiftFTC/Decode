@@ -129,6 +129,15 @@ public class SorterSys extends SubsystemBase {
 
     }
 
+    public static MOTIF getMotifFromAprilTag(int id) {
+        switch (id) {
+            case 21: return MOTIF.GREEN_PURPLE_PURPLE;
+            case 22: return MOTIF.PURPLE_GREEN_PURPLE;
+            case 23: return MOTIF.PURPLE_PURPLE_GREEN;
+            default: return MOTIF.NONE;
+        }
+    }
+
     public ARTIFACT_COLOR getColor(RevColorSensorV3 colorSensor) {
         if (colorSensor.getDistance(DistanceUnit.MM) > 50) return ARTIFACT_COLOR.EMPTY;
         return (colorSensor.green() > colorSensor.red() && colorSensor.green() > colorSensor.blue()) ? ARTIFACT_COLOR.GREEN : ARTIFACT_COLOR.PURPLE;
