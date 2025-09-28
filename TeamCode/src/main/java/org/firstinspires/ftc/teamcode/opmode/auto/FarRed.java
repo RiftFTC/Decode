@@ -14,6 +14,7 @@ import org.firstinspires.ftc.teamcode.util.Robot;
 @Autonomous(name = "Far Red", group = "Auto")
 public class FarRed extends AutoBaseOpMode{
 
+    //TODO: Complete Far Red autonomous routine
     Action leave;
 
     @Override
