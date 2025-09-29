@@ -16,6 +16,7 @@ import org.firstinspires.ftc.teamcode.util.Robot;
 public class FarRed extends AutoBaseOpMode{
 
     //TODO: Implement MeepMeep auto path
+    //Issue URL: https://github.com/RiftFTC/Decode/issues/11
     Action leave;
 
     @Override
