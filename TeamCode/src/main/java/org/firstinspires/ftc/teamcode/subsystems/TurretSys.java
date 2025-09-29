@@ -4,6 +4,7 @@ import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.hardware.SimpleServo;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
+import org.firstinspires.ftc.teamcode.opmode.BaseOpMode;
 import org.firstinspires.ftc.teamcode.util.math.Precision;
 import xyz.devmello.voyager.Voyager;
 import xyz.devmello.voyager.math.geometry.PointXY;
@@ -16,7 +17,10 @@ public class TurretSys extends SubsystemBase {
     private final MotorEx motor;
     private final Voyager voyager;
 
-    public final PointXY GOAL_POSE = new PointXY(-72, 72); //inches
+    public final PointXY GOAL_POSE_RED = new PointXY(-72, 72); //inches
+    public final PointXY GOAL_POSE_BLUE = new PointXY(-72, -72); //inches
+
+    public final PointXY GOAL_POSE;
 
     public static double TURRET_MID = 0.5; //180 degrees
     public static double TURRET_RIGHT = 0.15; //90 degrees
@@ -30,13 +34,14 @@ public class TurretSys extends SubsystemBase {
 
     private boolean isActive = false;
 
-    public TurretSys(SimpleServo turret, SimpleServo pitch, MotorEx motor, Voyager voyager) {
+    public TurretSys(SimpleServo turret, SimpleServo pitch, MotorEx motor, Voyager voyager, BaseOpMode.TEAM team) {
         this.turret = turret;
         this.voyager = voyager;
         this.pitch = pitch;
         this.motor = motor;
         turret.setPosition(TURRET_MID);
         motor.setZeroPowerBehavior(MotorEx.ZeroPowerBehavior.FLOAT);
+        GOAL_POSE = (team == BaseOpMode.TEAM.RED) ? GOAL_POSE_RED : GOAL_POSE_BLUE;
     }
 
     public void setActive(boolean active) {

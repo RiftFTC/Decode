@@ -8,7 +8,7 @@ import com.noahbres.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
 import java.lang.Math;
 import java.util.Arrays;
 
-public class FarRed {
+public class CloseBlue {
 
     private static VelConstraint slowConstraint = new MinVelConstraint(Arrays.asList(
 
@@ -20,7 +20,7 @@ public class FarRed {
 
     private static VelConstraint mediumConstraint = new MinVelConstraint(Arrays.asList(
 
-            new TranslationalVelConstraint(15),
+            new TranslationalVelConstraint(7.5),
 
             new AngularVelConstraint(1)
 
@@ -28,14 +28,14 @@ public class FarRed {
 
     private static VelConstraint maxConstraint = new MinVelConstraint(Arrays.asList(
 
-            new TranslationalVelConstraint(60),
+            new TranslationalVelConstraint(40),
 
             new AngularVelConstraint(1)
 
     ));
 
     public static void main(String[] args) {
-        MeepMeep meepMeep = new MeepMeep(800);
+        MeepMeep meepMeep = new MeepMeep(1200);
 
 
 
@@ -44,23 +44,20 @@ public class FarRed {
                 .setDimensions(17, 17)
                 .build();
 
-        myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(62, 14.75, Math.toRadians(180)))
+        myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(-38.5, -55.4, Math.toRadians(180)))
                 //PRELOAD
 
-                .strafeTo(new Vector2d(24, 30), maxConstraint)
-                .strafeTo(new Vector2d(24, 47))
-                .strafeTo(new Vector2d(30, 47), slowConstraint)
+                .strafeTo(new Vector2d(-22.5, -47), mediumConstraint)
                 .waitSeconds(5)
-                .strafeTo(new Vector2d(23,30), maxConstraint)
-                .strafeTo(new Vector2d(1,30), maxConstraint)
-                .strafeTo(new Vector2d(1,47))
-                .strafeTo(new Vector2d(6, 47), slowConstraint)
-                .waitSeconds(3)
-                .strafeToLinearHeading(new Vector2d(62, 56), Math.toRadians(270), mediumConstraint)
-                .strafeTo(new Vector2d(62, 61), slowConstraint)
-                        .waitSeconds(3)
-                .strafeToLinearHeading(new Vector2d(2, 47.6), Math.toRadians(180), mediumConstraint)
+                .strafeTo(new Vector2d(-17.2, -47), slowConstraint)
+                .waitSeconds(5)
+                .strafeTo(new Vector2d(6, -47), mediumConstraint)
+                .waitSeconds(5)
+                .strafeTo(new Vector2d(30, -47), mediumConstraint)
+                .waitSeconds(5)
+                .strafeTo(new Vector2d(30.1, -47), maxConstraint)
                 .build());
+
 
         meepMeep.setBackground(MeepMeep.Background.FIELD_DECODE_JUICE_DARK)
                 .setDarkMode(true)

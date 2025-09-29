@@ -4,5 +4,6 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 @Autonomous(name = "Close Red", group = "Auto")
 public class CloseRed extends AutoBaseOpMode{
-    //TODO: Complete Close Red autonomous routine
+    //TODO: Create base auto class
+    //TODO: Implement MeepMeep auto path
 }
