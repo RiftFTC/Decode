@@ -1,10 +1,10 @@
-name: Cloud-compile
+name: Cloud-compile (from ACME Robotics)
 
 on:
   push:
-    branches: [ main ]
+    branches: [ master ]
   pull_request:
-    branches: [ main ]
+    branches: [ master ]
   workflow_dispatch:
 
 jobs:
