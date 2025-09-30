@@ -55,7 +55,7 @@ import java.util.List;
 public final class MecanumDrive {
     public static class Params {
         // IMU orientation
-        // TODO: fill in these values based on
+        // TODO: fill in these values
         //   see https://ftc-docs.firstinspires.org/en/latest/programming_resources/imu/imu.html?highlight=imu#physical-hub-mounting
         public RevHubOrientationOnRobot.LogoFacingDirection logoFacingDirection =
                 RevHubOrientationOnRobot.LogoFacingDirection.UP;
@@ -235,7 +235,7 @@ public final class MecanumDrive {
         rightBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        // TODO: reverse motor directions if needed
+        // TODO: reverse motor directions
         //   leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
 
 

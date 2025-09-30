@@ -36,14 +36,14 @@ public final class PinpointLocalizer implements Localizer {
     private Pose2d txPinpointRobot = new Pose2d(0, 0, 0);
 
     public PinpointLocalizer(HardwareMap hardwareMap, Pose2d initialPose) {
-        // TODO: make sure your config has a Pinpoint device with this name
+        // TODO: make sure your config has a Pinpoint device with this
         //   see https://ftc-docs.firstinspires.org/en/latest/hardware_and_software_configuration/configuring/index.html
         driver = hardwareMap.get(GoBildaPinpointDriver.class, "odo");
 
         driver.setEncoderResolution(PARAMS.res, DistanceUnit.MM);
         driver.setOffsets(PARAMS.xOffset, PARAMS.yOffset, DistanceUnit.MM);
 
-        // TODO: reverse encoder directions if needed
+        // TODO: reverse encoder directions
         initialParDirection = GoBildaPinpointDriver.EncoderDirection.FORWARD;
         initialPerpDirection = GoBildaPinpointDriver.EncoderDirection.FORWARD;
 
