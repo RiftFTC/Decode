@@ -37,6 +37,7 @@ public final class PinpointLocalizer implements Localizer {
 
     public PinpointLocalizer(HardwareMap hardwareMap, Pose2d initialPose) {
         // TODO: make sure your config has a Pinpoint device with this
+        // Issue URL: https://github.com/RiftFTC/Decode/issues/15
         //   see https://ftc-docs.firstinspires.org/en/latest/hardware_and_software_configuration/configuring/index.html
         driver = hardwareMap.get(GoBildaPinpointDriver.class, "odo");
 
@@ -44,6 +45,7 @@ public final class PinpointLocalizer implements Localizer {
         driver.setOffsets(PARAMS.xOffset, PARAMS.yOffset, DistanceUnit.MM);
 
         // TODO: reverse encoder directions
+        // Issue URL: https://github.com/RiftFTC/Decode/issues/14
         initialParDirection = GoBildaPinpointDriver.EncoderDirection.FORWARD;
         initialPerpDirection = GoBildaPinpointDriver.EncoderDirection.FORWARD;
 

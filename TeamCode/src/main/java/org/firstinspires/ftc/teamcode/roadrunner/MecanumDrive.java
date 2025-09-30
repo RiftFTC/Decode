@@ -56,6 +56,7 @@ public final class MecanumDrive {
     public static class Params {
         // IMU orientation
         // TODO: fill in these values
+        // Issue URL: https://github.com/RiftFTC/Decode/issues/13
         //   see https://ftc-docs.firstinspires.org/en/latest/programming_resources/imu/imu.html?highlight=imu#physical-hub-mounting
         public RevHubOrientationOnRobot.LogoFacingDirection logoFacingDirection =
                 RevHubOrientationOnRobot.LogoFacingDirection.UP;
@@ -236,6 +237,7 @@ public final class MecanumDrive {
         rightFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         // TODO: reverse motor directions
+        // Issue URL: https://github.com/RiftFTC/Decode/issues/12
         //   leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
 
 
