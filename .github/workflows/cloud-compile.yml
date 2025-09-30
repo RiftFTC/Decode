@@ -46,8 +46,8 @@ jobs:
         with:
           name: "Release ${{ github.run_number }}"
           tag_name: "v${{ github.run_number }}"
+          overwrite: true
           files: |
-            **/build/outputs/apk/release/*.apk
             **/build/outputs/apk/**/release/*.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
