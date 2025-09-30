@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "ftclib": {
+      "trust": "true",
+      "httpUrl": "https://docs.ftclib.org/ftclib/~gitbook/mcp"
+    }
+  }
+}

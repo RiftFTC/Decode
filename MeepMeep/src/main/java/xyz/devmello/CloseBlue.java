@@ -37,8 +37,6 @@ public class CloseBlue {
     public static void main(String[] args) {
         MeepMeep meepMeep = new MeepMeep(1200);
 
-
-
         RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
                 .setConstraints(50, 50, Math.PI, Math.PI, 11.594258057297543)
                 .setDimensions(17, 17)
