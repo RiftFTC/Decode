@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.util.pathfinder;
+package org.firstinspires.ftc.teamcode.util.voyager;
 
 import com.acmerobotics.roadrunner.Pose2d;
 import org.firstinspires.ftc.teamcode.roadrunner.Localizer;

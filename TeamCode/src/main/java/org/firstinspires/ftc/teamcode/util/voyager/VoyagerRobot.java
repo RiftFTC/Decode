@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.util.pathfinder;
+package org.firstinspires.ftc.teamcode.util.voyager;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.DcMotor;

@@ -10,7 +10,7 @@ import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.teamcode.util.Robot;
 import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;
-import org.firstinspires.ftc.teamcode.util.pathfinder.VoyagerRobot;
+import org.firstinspires.ftc.teamcode.util.voyager.VoyagerRobot;
 import xyz.devmello.voyager.Voyager;
 
 import java.util.function.DoubleSupplier;
