@@ -36,6 +36,7 @@ public class CloseBlue {
 
     public static void main(String[] args) {
         //TODO: (Close Blue) Fix Auto Path to shoot from launch zone
+        //Issue URL: https://github.com/RiftFTC/Decode/issues/18
         MeepMeep meepMeep = new MeepMeep(1200);
 
         RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
