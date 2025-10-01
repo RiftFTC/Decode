@@ -101,6 +101,7 @@ public class TurretSys extends SubsystemBase {
 
         if (isActive && voyager.getZoneProcessor().getContainingZones(position).stream().anyMatch(z -> z == LAUNCH_ZONE_1 || z == LAUNCH_ZONE_2)) {
             //TODO: Check using Voyager's zones library if it is within the 2 launch zones.
+            //Issue URL: https://github.com/RiftFTC/Decode/issues/16
             // Zone 1: Defined by triangle (-72, 72), (0,0), (-72,-72)
             // Zone 2: Defined by triangle (72, 24), (48, 0), (72, -24)
             motor.set(getTargetPower(distance));
