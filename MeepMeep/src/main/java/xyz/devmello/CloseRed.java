@@ -35,6 +35,7 @@ public class CloseRed {
     ));
 
     public static void main(String[] args) {
+        //TODO: (Close Red) Fix Auto Path to shoot from launch zone
         MeepMeep meepMeep = new MeepMeep(1200);
 
 

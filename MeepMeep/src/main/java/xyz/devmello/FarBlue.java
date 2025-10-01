@@ -35,6 +35,7 @@ public class FarBlue {
     ));
 
     public static void main(String[] args) {
+        //TODO: (Far Blue) Fix Auto Path to shoot from launch zone
         MeepMeep meepMeep = new MeepMeep(800);
 
 

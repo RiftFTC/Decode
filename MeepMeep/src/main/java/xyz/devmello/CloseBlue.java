@@ -35,6 +35,7 @@ public class CloseBlue {
     ));
 
     public static void main(String[] args) {
+        //TODO: (Close Blue) Fix Auto Path to shoot from launch zone
         MeepMeep meepMeep = new MeepMeep(1200);
 
         RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
