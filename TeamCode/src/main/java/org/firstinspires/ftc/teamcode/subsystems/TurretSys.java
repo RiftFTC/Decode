@@ -9,6 +9,8 @@ import org.firstinspires.ftc.teamcode.util.math.Precision;
 import xyz.devmello.voyager.Voyager;
 import xyz.devmello.voyager.math.geometry.PointXY;
 import xyz.devmello.voyager.math.geometry.PointXYZ;
+import xyz.devmello.voyager.math.geometry.Triangle;
+import xyz.devmello.voyager.pathgen.zones.Zone;
 
 @Config
 public class TurretSys extends SubsystemBase {
@@ -21,6 +23,18 @@ public class TurretSys extends SubsystemBase {
     public final PointXY GOAL_POSE_BLUE = new PointXY(-72, -72); //inches
 
     public final PointXY GOAL_POSE;
+
+    public final Zone LAUNCH_ZONE_1 = new Zone(new Triangle(
+            new PointXY(-72, 72),
+            new PointXY(0, 0),
+            new PointXY(-72, -72)
+    ));
+
+    public final Zone LAUNCH_ZONE_2 = new Zone(new Triangle(
+            new PointXY(72, 24),
+            new PointXY(48, 0),
+            new PointXY(72, -24)
+    ));
 
     public static double TURRET_MID = 0.5; //180 degrees
     public static double TURRET_RIGHT = 0.15; //90 degrees
@@ -42,6 +56,8 @@ public class TurretSys extends SubsystemBase {
         turret.setPosition(TURRET_MID);
         motor.setZeroPowerBehavior(MotorEx.ZeroPowerBehavior.FLOAT);
         GOAL_POSE = (team == BaseOpMode.TEAM.RED) ? GOAL_POSE_RED : GOAL_POSE_BLUE;
+        voyager.getZoneProcessor().addZone("LAUNCH_ZONE_1", LAUNCH_ZONE_1);
+        voyager.getZoneProcessor().addZone("LAUNCH_ZONE_2", LAUNCH_ZONE_2);
     }
 
     public void setActive(boolean active) {
@@ -83,7 +99,7 @@ public class TurretSys extends SubsystemBase {
         turret.setPosition(getTargetPosition(position.angleTo(GOAL_POSE).subtract(position.z()).deg()));
         pitch.setPosition(getPitchPosition(distance));
 
-        if (isActive) {
+        if (isActive && voyager.getZoneProcessor().getContainingZones(position).stream().anyMatch(z -> z == LAUNCH_ZONE_1 || z == LAUNCH_ZONE_2)) {
             //TODO: Check using Voyager's zones library if it is within the 2 launch zones.
             // Zone 1: Defined by triangle (-72, 72), (0,0), (-72,-72)
             // Zone 2: Defined by triangle (72, 24), (48, 0), (72, -24)
