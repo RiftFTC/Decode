@@ -24,18 +24,6 @@ public class TurretSys extends SubsystemBase {
 
     public final PointXY GOAL_POSE;
 
-    public final Zone LAUNCH_ZONE_1 = new Zone(new Triangle(
-            new PointXY(-72, 72),
-            new PointXY(0, 0),
-            new PointXY(-72, -72)
-    ));
-
-    public final Zone LAUNCH_ZONE_2 = new Zone(new Triangle(
-            new PointXY(72, 24),
-            new PointXY(48, 0),
-            new PointXY(72, -24)
-    ));
-
     public static double TURRET_MID = 0.5; //180 degrees
     public static double TURRET_RIGHT = 0.15; //90 degrees
     public static double TURRET_LEFT = 0.85; //270 degrees
@@ -56,8 +44,6 @@ public class TurretSys extends SubsystemBase {
         turret.setPosition(TURRET_MID);
         motor.setZeroPowerBehavior(MotorEx.ZeroPowerBehavior.FLOAT);
         GOAL_POSE = (team == BaseOpMode.TEAM.RED) ? GOAL_POSE_RED : GOAL_POSE_BLUE;
-        voyager.getZoneProcessor().addZone("LAUNCH_ZONE_1", LAUNCH_ZONE_1);
-        voyager.getZoneProcessor().addZone("LAUNCH_ZONE_2", LAUNCH_ZONE_2);
     }
 
     public void setActive(boolean active) {
@@ -99,7 +85,8 @@ public class TurretSys extends SubsystemBase {
         turret.setPosition(getTargetPosition(position.angleTo(GOAL_POSE).subtract(position.z()).deg()));
         pitch.setPosition(getPitchPosition(distance));
 
-        if (isActive && voyager.getZoneProcessor().getContainingZones(position).stream().anyMatch(z -> z == LAUNCH_ZONE_1 || z == LAUNCH_ZONE_2)) {
+        //TODO: Add a check to see if the robot is in a valid launch zone
+        if (isActive) {
             motor.set(getTargetPower(distance));
         } else {
             motor.set(0);
