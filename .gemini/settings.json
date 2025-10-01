@@ -3,6 +3,12 @@
     "ftclib": {
       "trust": "true",
       "httpUrl": "https://docs.ftclib.org/ftclib/~gitbook/mcp"
+    },
+    "docs-mcp-server": {
+      "type": "sse",
+      "url": "http://localhost:6280/sse",
+      "disabled": false,
+      "autoApprove": []
     }
   }
 }
