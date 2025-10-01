@@ -86,6 +86,7 @@ public class TurretSys extends SubsystemBase {
         pitch.setPosition(getPitchPosition(distance));
 
         //TODO: Add a check to see if the robot is in a valid launch zone
+        //Issue URL: https://github.com/RiftFTC/Decode/issues/17
         if (isActive) {
             motor.set(getTargetPower(distance));
         } else {
