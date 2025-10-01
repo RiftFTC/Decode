@@ -82,7 +82,11 @@ public class TurretSys extends SubsystemBase {
         //getTargetPosition(...) converts the angle to servo position
         turret.setPosition(getTargetPosition(position.angleTo(GOAL_POSE).subtract(position.z()).deg()));
         pitch.setPosition(getPitchPosition(distance));
+
         if (isActive) {
+            //TODO: Check using Voyager's zones library if it is within the 2 launch zones.
+            // Zone 1: Defined by triangle (-72, 72), (0,0), (-72,-72)
+            // Zone 2: Defined by triangle (72, 24), (48, 0), (72, -24)
             motor.set(getTargetPower(distance));
         } else {
             motor.set(0);
