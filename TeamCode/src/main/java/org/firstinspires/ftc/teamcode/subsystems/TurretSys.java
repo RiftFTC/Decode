@@ -22,10 +22,9 @@ public class TurretSys extends SubsystemBase {
     public final PointXY GOAL_POSE_RED = new PointXY(-72, 72); //inches
     public final PointXY GOAL_POSE_BLUE = new PointXY(-72, -72); //inches
 
-    public final PointXY GOAL_POSE;
+    //TODO: Store both of these GOAL_POSES in a List and select based on team color
 
-    //TODO: Test TODO workflow and check if it works
-    //Issue URL: https://github.com/RiftFTC/Decode/issues/22
+    public PointXY GOAL_POSE;
 
     public static double TURRET_MID = 0.5; //180 degrees
     public static double TURRET_RIGHT = 0.15; //90 degrees
@@ -46,7 +45,6 @@ public class TurretSys extends SubsystemBase {
         this.motor = motor;
         turret.setPosition(TURRET_MID);
         motor.setZeroPowerBehavior(MotorEx.ZeroPowerBehavior.FLOAT);
-        GOAL_POSE = (team == BaseOpMode.TEAM.RED) ? GOAL_POSE_RED : GOAL_POSE_BLUE;
     }
 
     public void setActive(boolean active) {
