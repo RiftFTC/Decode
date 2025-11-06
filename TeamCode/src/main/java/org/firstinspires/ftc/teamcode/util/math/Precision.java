@@ -35,7 +35,7 @@ public class Precision {
 
     public static double calculateWeightedValue(double limitLeft, double limitRight, double weight) {
         if (weight < 0 || weight > 1) return -1;
-        return limitLeft + (limitRight - limitLeft) * (1 - weight);
+        return limitLeft + (limitRight - limitLeft) * (weight);
     }
 
     public static double limit(double percent, double lowerLimit, double upperLimit) {

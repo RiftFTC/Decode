@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.opmode;
 
 import android.util.Log;
+import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 
@@ -29,12 +30,17 @@ public class MainOpMode extends BaseOpMode {
             Log.e("OpenCv", e.getMessage());
         }
 
+        intakeSys.setDefaultCommand(
+                intakeSys.run(
+                        () -> gamepadEx1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER)
+                )
+        );
+
         driveSys.setDefaultCommand(driveSys.drive(
                 gamepadEx1::getLeftY,
                 gamepadEx1::getLeftX,
                 gamepadEx1::getRightX
         ));
-
 
     }
 }

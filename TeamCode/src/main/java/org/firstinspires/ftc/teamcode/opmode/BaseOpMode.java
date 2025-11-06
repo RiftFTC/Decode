@@ -10,6 +10,7 @@ import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSys;
+import org.firstinspires.ftc.teamcode.subsystems.IntakeSys;
 import org.firstinspires.ftc.teamcode.subsystems.TurretSys;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
@@ -17,8 +18,9 @@ import xyz.devmello.voyager.math.geometry.Angle;
 
 public class BaseOpMode extends CommandOpMode {
     protected GamepadEx gamepadEx1, gamepadEx2;
-    protected MotorEx fl, fr, bl, br, shooter;
+    protected MotorEx fl, fr, bl, br, shooter, intake;
     protected DriveSys driveSys;
+    protected IntakeSys intakeSys;
     protected TurretSys turretSys;
     private double loopTime = 0;
     protected OpenCvCamera camera;
@@ -46,6 +48,7 @@ public class BaseOpMode extends CommandOpMode {
         fr = new MotorEx(hardwareMap, "fr");
         bl = new MotorEx(hardwareMap, "bl");
         br = new MotorEx(hardwareMap, "br");
+        intake = new MotorEx(hardwareMap, "intake");
         shooter = new MotorEx(hardwareMap, "shooter");
     }
 
@@ -55,7 +58,7 @@ public class BaseOpMode extends CommandOpMode {
 
     public void initSys() {
         driveSys = new DriveSys(hardwareMap);
-
+        intakeSys = new IntakeSys(intake);
         //turretSys = new TurretSys(hardwareMap);
     }
 
