@@ -10,21 +10,22 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    if: contains(github.event.head_commit.message, 'Build')
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Get commit message
-        id: get_commit
-        run: |
-          echo "message=$(git log -1 --pretty=%B)" >> "$GITHUB_OUTPUT"
+#      - name: Get commit message
+#        id: get_commit
+#        run: |
+#          echo "message=$(git log -1 --pretty=%B)" >> "$GITHUB_OUTPUT"
 
-      - name: Skip if commit message does not contain 'Build'
-        if: ${{ !contains(steps.get_commit.outputs.message, 'Build') }}
-        run: |
-          echo "Commit message does not contain 'Build'. Skipping workflow."
-          exit 0
+#      - name: Skip if commit message does not contain 'Build'
+#        if: ${{ !contains(steps.get_commit.outputs.message, 'Build') }}
+#        run: |
+#          echo "Commit message does not contain 'Build'. Skipping workflow."
+#          exit 0
 
       - name: Set up JDK 17 with Gradle cache
         uses: actions/setup-java@v4
