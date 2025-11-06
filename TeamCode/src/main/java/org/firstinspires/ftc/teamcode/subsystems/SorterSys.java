@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.subsystems;
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.*;
 import com.arcrobotics.ftclib.hardware.SimpleServo;
+import com.qualcomm.hardware.rev.Rev2mDistanceSensor;
 import com.qualcomm.hardware.rev.RevColorSensorV3;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
@@ -45,6 +46,9 @@ public class SorterSys extends SubsystemBase {
 
     ARTIFACT_COLOR[] motifPattern;
 
+    //TODO: add two distance sensors to detect artifacts on each side of the intake
+    // should have a method to return which side is better to intake from based on distance readings
+    private final Rev2mDistanceSensor intakeLeft, intakeRight;
     private final RevColorSensorV3 leftC, middleC, rightC;
     private final SimpleServo spinner;
 
@@ -68,11 +72,13 @@ public class SorterSys extends SubsystemBase {
     private MOTIF motif = MOTIF.NONE;
 
     public SorterSys(SimpleServo spinner,
-                     RevColorSensorV3 leftC, RevColorSensorV3 middleC, RevColorSensorV3 rightC) {
+                     RevColorSensorV3 leftC, RevColorSensorV3 middleC, RevColorSensorV3 rightC, Rev2mDistanceSensor intakeLeft, Rev2mDistanceSensor intakeRight) {
         this.leftC = leftC;
         this.middleC = middleC;
         this.rightC = rightC;
         this.spinner = spinner;
+        this.intakeLeft = intakeLeft;
+        this.intakeRight = intakeRight;
     }
 
     private void release(int pos) {
@@ -168,11 +174,32 @@ public class SorterSys extends SubsystemBase {
         return Arrays.stream(inventory).allMatch(c -> c == ARTIFACT_COLOR.EMPTY);
     }
 
-    @Override
-    public void periodic() {
+    public void updateInventory() {
         inventory[0] = getColor(leftC);
         inventory[1] = getColor(middleC);
         inventory[2] = getColor(rightC);
+    }
+
+    public void getIntakeSide() {
+        double leftDistance = intakeLeft.getDistance(DistanceUnit.MM);
+        double rightDistance = intakeRight.getDistance(DistanceUnit.MM);
+
+        if (leftDistance < 50 && rightDistance < 50) {
+            setCurrentPriority((leftDistance < rightDistance) ? USAGE_PRIORITY.INTAKE1 : USAGE_PRIORITY.INTAKE2); // 0 for left, 1 for right
+        } else if (leftDistance < 50) {
+            setCurrentPriority(USAGE_PRIORITY.INTAKE1);
+        } else if (rightDistance < 50) {
+            setCurrentPriority(USAGE_PRIORITY.INTAKE2);
+        } else {
+            setCurrentPriority(USAGE_PRIORITY.INTAKE1); // default to left intake
+        }
+    }
+
+    @Override
+    public void periodic() {
+
+
+
         if(currentPriority.equals(USAGE_PRIORITY.TURRET)) {
             release(releaseNext());
         } else if (currentPriority.equals(USAGE_PRIORITY.INTAKE1)) {
@@ -192,5 +219,7 @@ public class SorterSys extends SubsystemBase {
                 spinner.setPosition(LEFT_ENTER1);
             }
         }
+
+
     }
 }

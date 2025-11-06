@@ -7,6 +7,7 @@ import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.Subsystem;
 import com.arcrobotics.ftclib.hardware.SimpleServo;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
+import com.qualcomm.hardware.rev.Rev2mDistanceSensor;
 import com.qualcomm.hardware.rev.RevColorSensorV3;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
@@ -24,6 +25,7 @@ public class AutoBaseOpMode extends OpMode {
     protected MotorEx fl, fr, bl, br, shooter, intake;
     protected SimpleServo turret, pitch, spinner;
     protected RevColorSensorV3 leftC, middleC, rightC;
+    protected Rev2mDistanceSensor leftI, rightI;
     protected DriveSys driveSys;
     protected TurretSys turretSys;
     protected IntakeSys intakeSys;
@@ -68,6 +70,8 @@ public class AutoBaseOpMode extends OpMode {
         leftC = hardwareMap.get(RevColorSensorV3.class, "leftC");
         middleC = hardwareMap.get(RevColorSensorV3.class, "middleC");
         rightC = hardwareMap.get(RevColorSensorV3.class, "rightC");
+        leftI = hardwareMap.get(Rev2mDistanceSensor.class, "leftI");
+        rightI = hardwareMap.get(Rev2mDistanceSensor.class, "rightI");
     }
 
     public void configHw() {
@@ -76,7 +80,7 @@ public class AutoBaseOpMode extends OpMode {
 
     public void initSys() {
         intakeSys = new IntakeSys(intake);
-        sorterSys = new SorterSys(spinner, leftC, middleC, rightC);
+        sorterSys = new SorterSys(spinner, leftC, middleC, rightC, leftI, rightI);
     }
 
     public void initMisc() {

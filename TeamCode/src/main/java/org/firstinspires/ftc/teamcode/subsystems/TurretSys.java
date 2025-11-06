@@ -106,7 +106,7 @@ public class TurretSys extends SubsystemBase {
         turret.setPosition(getTargetPosition(position.angleTo(GOAL_POSE).subtract(position.z()).deg()));
         pitch.setPosition(getPitchPosition(distance));
 
-        if (isActive && withinLaunchZone()) {
+        if (isActive) {
             motor.set(getTargetPower(distance));
         } else {
             motor.set(0);

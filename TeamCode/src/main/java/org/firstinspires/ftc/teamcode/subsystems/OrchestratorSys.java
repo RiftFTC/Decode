@@ -18,32 +18,26 @@ public class OrchestratorSys extends SubsystemBase {
         if (turret.withinLaunchZone() && !intake.isOn()) {
             sorter.setCurrentPriority(SorterSys.USAGE_PRIORITY.TURRET);
             intake.setActive(false);
+            turret.setActive(true);
         }
 
         if (!turret.withinLaunchZone()) {
-            //set the intake to on
+            intake.setActive(true);
+            turret.setActive(false);
+        }
+
+        if (sorter.isFull() && intake.isOn()) {
+            intake.setActive(false);
+            turret.setActive(true);
+        }
+
+        if (!sorter.isFull() && !intake.isOn() ) {
             intake.setActive(true);
         }
 
-        // TODO: finish this orchestrator logic
+        if (sorter.isEmpty() && turret.isActive()) {
+            turret.setActive(false);
+        }
 
-
-
-//        if (sorter.isFull() && intake.isOn()) {
-//            intake.setActive(false);
-//            turret.setActive(true);
-//        }
-//
-//        if (!sorter.isFull() && !intake.isOn() ) {
-//            intake.setActive(true);
-//        }
-//
-//        if (sorter.isEmpty() && turret.isActive()) {
-//            turret.setActive(false);
-//        }
-//
-//        if (!turret.isActive() && !sorter.isEmpty()) {
-//            turret.setActive(true);
-//        }
     }
 }
