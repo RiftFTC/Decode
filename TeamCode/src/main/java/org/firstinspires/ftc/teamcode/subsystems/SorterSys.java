@@ -20,16 +20,13 @@ public class SorterSys extends SubsystemBase {
         EMPTY
     }
 
-    public enum ARTIFACT_POSITION {
-        LEFT(0),
-        MIDDLE(1),
-        RIGHT(2);
-
-        public final int index;
-        ARTIFACT_POSITION(int index) {
-            this.index = index;
-        }
-    }
+    /**
+     * Positions
+     * LEFT = 0
+     * MIDDLE = 1
+     * RIGHT = 2
+     * NO_RELEASE = -1
+     */
 
     public static enum MOTIF {
         GREEN_PURPLE_PURPLE,
@@ -38,17 +35,28 @@ public class SorterSys extends SubsystemBase {
         NONE
     }
 
+    public enum USAGE_PRIORITY {
+        TURRET,
+        INTAKE1,
+        INTAKE2
+    }
+
+    private USAGE_PRIORITY currentPriority = USAGE_PRIORITY.INTAKE1;
+
     ARTIFACT_COLOR[] motifPattern;
 
     private final RevColorSensorV3 leftC, middleC, rightC;
-    private final SimpleServo left,middle,right;
+    private final SimpleServo spinner;
 
-    public static double LEFT_RELEASE = 0;
-    public static double MIDDLE_RELEASE = 0;
-    public static double RIGHT_RELEASE = 0;
-    public static double LEFT_HOLD = 0.5;
-    public static double MIDDLE_HOLD = 0.5;
-    public static double RIGHT_HOLD = 0.5;
+    public static double LEFT_ENTER = 0;
+    public static double LEFT_ENTER1 = 0;
+    public static double LEFT_EXIT = 0;
+    public static double MIDDLE_ENTER = 0;
+    public static double MIDDLE_ENTER1 = 0;
+    public static double MIDDLE_EXIT = 0;
+    public static double RIGHT_ENTER = 0;
+    public static double RIGHT_ENTER1 = 0;
+    public static double RIGHT_EXIT = 0;
 
     public ARTIFACT_COLOR[] inventory = new ARTIFACT_COLOR[] {
             ARTIFACT_COLOR.EMPTY,
@@ -59,57 +67,28 @@ public class SorterSys extends SubsystemBase {
     private final List<ARTIFACT_COLOR> releaseHistory = new ArrayList<>();
     private MOTIF motif = MOTIF.NONE;
 
-    public SorterSys(SimpleServo left, SimpleServo middle, SimpleServo right,
+    public SorterSys(SimpleServo spinner,
                      RevColorSensorV3 leftC, RevColorSensorV3 middleC, RevColorSensorV3 rightC) {
         this.leftC = leftC;
         this.middleC = middleC;
         this.rightC = rightC;
-        this.left = left;
-        this.middle = middle;
-        this.right = right;
+        this.spinner = spinner;
     }
 
-    public Command load() {
-        return new InstantCommand(() -> {
-            int pos = releaseNext();
-            switch (pos) {
-                case 0: CommandScheduler.getInstance().schedule(releaseCommand(ARTIFACT_POSITION.LEFT));
-                case 1: CommandScheduler.getInstance().schedule(releaseCommand(ARTIFACT_POSITION.MIDDLE));
-                case 2: CommandScheduler.getInstance().schedule(releaseCommand(ARTIFACT_POSITION.RIGHT));
-            }
-        }, this);
-    }
-
-    private Command releaseCommand(ARTIFACT_POSITION position) {
-        return new SequentialCommandGroup(
-                new InstantCommand(() -> release(position), this),
-                new WaitCommand(500),
-                new InstantCommand(() -> hold(position), this)
-        );
-    }
-
-    private void release(ARTIFACT_POSITION pos) {
+    private void release(int pos) {
         switch (pos) {
-            case LEFT: {
-                left.setPosition(LEFT_RELEASE);
-                inventory[0] = ARTIFACT_COLOR.EMPTY;
+            case 0: {
+                spinner.setPosition(LEFT_EXIT);
             }
-            case MIDDLE: {
-                middle.setPosition(MIDDLE_RELEASE);
-                inventory[1] = ARTIFACT_COLOR.EMPTY;
+            case 1: {
+                spinner.setPosition(MIDDLE_EXIT);
             }
-            case RIGHT: {
-                right.setPosition(RIGHT_RELEASE);
-                inventory[2] = ARTIFACT_COLOR.EMPTY;
+            case 2: {
+                spinner.setPosition(RIGHT_EXIT);
             }
-        }
-    }
-
-    private void hold(ARTIFACT_POSITION pos) {
-        switch (pos) {
-            case LEFT: left.setPosition(LEFT_HOLD);
-            case MIDDLE: middle.setPosition(MIDDLE_HOLD);
-            case RIGHT: right.setPosition(RIGHT_HOLD);
+            case -1: {
+                // Do nothing
+            }
         }
     }
 
@@ -169,6 +148,10 @@ public class SorterSys extends SubsystemBase {
         this.motifPattern = getMotifPattern(motif);
     }
 
+    public void setCurrentPriority(USAGE_PRIORITY currentPriority) {
+        this.currentPriority = currentPriority;
+    }
+
     public MOTIF getMotif() {
         return motif;
     }
@@ -190,5 +173,24 @@ public class SorterSys extends SubsystemBase {
         inventory[0] = getColor(leftC);
         inventory[1] = getColor(middleC);
         inventory[2] = getColor(rightC);
+        if(currentPriority.equals(USAGE_PRIORITY.TURRET)) {
+            release(releaseNext());
+        } else if (currentPriority.equals(USAGE_PRIORITY.INTAKE1)) {
+            if (inventory[0] == ARTIFACT_COLOR.EMPTY) {
+                spinner.setPosition(LEFT_ENTER);
+            } else if (inventory[1] == ARTIFACT_COLOR.EMPTY) {
+                spinner.setPosition(MIDDLE_ENTER);
+            } else if (inventory[2] == ARTIFACT_COLOR.EMPTY) {
+                spinner.setPosition(RIGHT_ENTER);
+            }
+        } else if (currentPriority.equals(USAGE_PRIORITY.INTAKE2)) {
+            if (inventory[2] == ARTIFACT_COLOR.EMPTY) {
+                spinner.setPosition(RIGHT_ENTER1);
+            } else if (inventory[1] == ARTIFACT_COLOR.EMPTY) {
+                spinner.setPosition(MIDDLE_ENTER1);
+            } else if (inventory[0] == ARTIFACT_COLOR.EMPTY) {
+                spinner.setPosition(LEFT_ENTER1);
+            }
+        }
     }
 }

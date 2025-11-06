@@ -22,14 +22,13 @@ import java.util.List;
 public class AutoBaseOpMode extends OpMode {
 
     protected MotorEx fl, fr, bl, br, shooter, intake;
-    protected SimpleServo turret, pitch, left, middle, right;
+    protected SimpleServo turret, pitch, spinner;
     protected RevColorSensorV3 leftC, middleC, rightC;
     protected DriveSys driveSys;
     protected TurretSys turretSys;
     protected IntakeSys intakeSys;
     protected SorterSys sorterSys;
     protected OrchestratorSys orchestratorSys;
-
 
     private AprilTagProcessor aprilTag;
     private VisionPortal visionPortal;
@@ -65,9 +64,7 @@ public class AutoBaseOpMode extends OpMode {
         intake = new MotorEx(hardwareMap, "intake");
         turret = new SimpleServo(hardwareMap, "turret", 0, 360);
         pitch = new SimpleServo(hardwareMap, "pitch", 0, 360);
-        left = new SimpleServo(hardwareMap, "left", 0, 360);
-        middle = new SimpleServo(hardwareMap, "middle", 0, 360);
-        right = new SimpleServo(hardwareMap, "right", 0, 360);
+        spinner = new SimpleServo(hardwareMap, "left", 0, 360);
         leftC = hardwareMap.get(RevColorSensorV3.class, "leftC");
         middleC = hardwareMap.get(RevColorSensorV3.class, "middleC");
         rightC = hardwareMap.get(RevColorSensorV3.class, "rightC");
@@ -79,7 +76,7 @@ public class AutoBaseOpMode extends OpMode {
 
     public void initSys() {
         intakeSys = new IntakeSys(intake);
-        sorterSys = new SorterSys(left, middle, right, leftC, middleC, rightC);
+        sorterSys = new SorterSys(spinner, leftC, middleC, rightC);
     }
 
     public void initMisc() {

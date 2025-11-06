@@ -24,6 +24,18 @@ public class TurretSys extends SubsystemBase {
 
     //TODO: Store both of these GOAL_POSES in a List and select based on team color
 
+    public final Zone LAUNCH_ZONE_1 = Zone.inflate(new Zone(new Triangle(
+            new PointXY(-72, 72),
+            new PointXY(0, 0),
+            new PointXY(-72, -72)
+    )), 9);
+
+    public final Zone LAUNCH_ZONE_2 = Zone.inflate(new Zone(new Triangle(
+            new PointXY(72, 24),
+            new PointXY(48, 0),
+            new PointXY(72, -24)
+    )), 9);
+
     public PointXY GOAL_POSE;
 
     public static double TURRET_MID = 0.5; //180 degrees
@@ -45,6 +57,9 @@ public class TurretSys extends SubsystemBase {
         this.motor = motor;
         turret.setPosition(TURRET_MID);
         motor.setZeroPowerBehavior(MotorEx.ZeroPowerBehavior.FLOAT);
+        voyager.getZoneProcessor().addZone("LAUNCH_ZONE_1", LAUNCH_ZONE_1);
+        voyager.getZoneProcessor().addZone("LAUNCH_ZONE_2", LAUNCH_ZONE_2);
+        GOAL_POSE = (BaseOpMode.TEAM.BLUE == team) ? GOAL_POSE_BLUE : GOAL_POSE_RED;
     }
 
     public void setActive(boolean active) {
@@ -77,6 +92,11 @@ public class TurretSys extends SubsystemBase {
         return Precision.linearInterpolate(distance, 20, 200, PITCH_MIN, PITCH_MAX);
     }
 
+    public boolean withinLaunchZone() {
+        PointXYZ position = voyager.getPosition();
+        return voyager.getZoneProcessor().getContainingZones(position).stream().anyMatch(z -> z == LAUNCH_ZONE_1 || z == LAUNCH_ZONE_2);
+    }
+
     @Override
     public void periodic() {
         PointXYZ position = voyager.getPosition();
@@ -86,9 +106,7 @@ public class TurretSys extends SubsystemBase {
         turret.setPosition(getTargetPosition(position.angleTo(GOAL_POSE).subtract(position.z()).deg()));
         pitch.setPosition(getPitchPosition(distance));
 
-        //TODO: Add a check to see if the robot is in a valid launch zone
-        //Issue URL: https://github.com/RiftFTC/Decode/issues/17
-        if (isActive) {
+        if (isActive && withinLaunchZone()) {
             motor.set(getTargetPower(distance));
         } else {
             motor.set(0);
