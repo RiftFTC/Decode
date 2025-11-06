@@ -22,8 +22,6 @@ public class TurretSys extends SubsystemBase {
     public final PointXY GOAL_POSE_RED = new PointXY(-72, 72); //inches
     public final PointXY GOAL_POSE_BLUE = new PointXY(-72, -72); //inches
 
-    //TODO: Store both of these GOAL_POSES in a List and select based on team color
-    //Issue URL: https://github.com/RiftFTC/Decode/issues/23
 
     public final Zone LAUNCH_ZONE_1 = Zone.inflate(new Zone(new Triangle(
             new PointXY(-72, 72),

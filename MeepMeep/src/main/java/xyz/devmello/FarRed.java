@@ -35,8 +35,6 @@ public class FarRed {
     ));
 
     public static void main(String[] args) {
-        //TODO: (Far Red) Fix Auto Path to shoot from launch zone
-        //Issue URL: https://github.com/RiftFTC/Decode/issues/21
         MeepMeep meepMeep = new MeepMeep(800);
 
 

@@ -35,8 +35,6 @@ public class CloseRed {
     ));
 
     public static void main(String[] args) {
-        //TODO: (Close Red) Fix Auto Path to shoot from launch zone
-        //Issue URL: https://github.com/RiftFTC/Decode/issues/19
         MeepMeep meepMeep = new MeepMeep(1200);
 
 

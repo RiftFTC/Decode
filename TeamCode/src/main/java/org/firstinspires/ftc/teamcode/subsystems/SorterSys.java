@@ -46,9 +46,6 @@ public class SorterSys extends SubsystemBase {
 
     ARTIFACT_COLOR[] motifPattern;
 
-    //TODO: add two distance sensors to detect artifacts on each side of the intake
-    //Issue URL: https://github.com/RiftFTC/Decode/issues/24
-    // should have a method to return which side is better to intake from based on distance readings
     private final Rev2mDistanceSensor intakeLeft, intakeRight;
     private final RevColorSensorV3 leftC, middleC, rightC;
     private final SimpleServo spinner;
